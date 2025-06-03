@@ -1,12 +1,12 @@
 <script setup>
 import Login from './components/Login.vue';
+import { RouterView } from 'vue-router';
 </script>
 
 <!-- template เป็นแท็คแรกของการเริ่มเขียน vue.js -->
 <template>
   <main>
-    <!-- <Navbar/> -->
-    <Login/>
+    <!-- <Login/> -->
+    <RouterView />
   </main>
 </template>
-

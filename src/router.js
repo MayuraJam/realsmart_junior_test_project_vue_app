@@ -4,8 +4,8 @@ import Dashboard from "./components/Dashboard.vue";
 
 const routes = [
   { path: '/', redirect: '/login' }, // redirect หน้าแรก
-  { path: '/login', component: Login },
-  { path: '/dashboard', component: Dashboard },
+  { path: '/login', component: Login ,name:"login"},
+  { path: '/dashboard', component: Dashboard ,name:"dashboard"},
 ]
 
 const router = createRouter({
