@@ -1,8 +1,6 @@
 <template>
     <div class="graph-card">
         <p style="font-weight: bold; font-size: 16px;">{{ graphName }}</p>
-        <p v-if="data.length"></p>
-        <p v-else>ไม่พบข้อมูล</p>
         <div ref="chart"></div>
     </div>
 </template>
@@ -10,7 +8,7 @@
 <script>
 import * as d3 from "d3";
 export default {
-    name: 'DataGraph',
+    name: 'KeywordGraph',
     props: {
         graphName: {
             type: String,
@@ -27,7 +25,6 @@ export default {
         }
     },
     watch: {
-        // เป็นส่วนของการเติดตามและฝ้าตรวจสอบเงื่อนไขเมื่อมีการเปลี่ยนแปลง แล้วกำหดว่าให้ทำอะไร
         data(newData) {
             if (newData.length) {
                 this.clearChart();
@@ -38,9 +35,9 @@ export default {
     methods: {
         createChart() {
             const data = this.data;
+            const margin = { top: 5, right: 20, bottom: 40, left: 55 };
 
-            const margin = { top: 20, right: 20, bottom: 40, left: 45 };
-            const width = 1100 - margin.left - margin.right;
+            const width = 1600 - margin.left - margin.right;
             const height = 200 - margin.top - margin.bottom;
 
             const svg = d3.select(this.$refs.chart)
@@ -67,7 +64,7 @@ export default {
             svg.append("path")
                 .datum(data)
                 .attr("fill", "none")
-                .attr("stroke", "steelblue")
+                .attr("stroke", "#CA7842")
                 .attr("stroke-width", 1)
                 .attr("d", line);
 
@@ -78,19 +75,19 @@ export default {
             svg.append("g")
                 .call(d3.axisLeft(y));
 
-            svg.append("text")
+             svg.append("text")
                 .attr("class", "x label")
                 .attr("text-anchor", "end")
                 .attr("x", width / 2)
                 .attr("y", height + margin.bottom - 2)
-                .text("published date (hour)");
+                .text("published date");
             svg.append("text")
                 .attr("class", "y label")
                 .attr("text-anchor", "end")
                 .attr("transform", "rotate(-90)")
-                .attr("y", -margin.left + 8)
+                .attr("y", -margin.left +10)
                 .attr("x", -margin.top)
-                .text("massage count");
+                .text("keyword count");
         },
         clearChart() {
             d3.select(this.$refs.chart).selectAll("*").remove();

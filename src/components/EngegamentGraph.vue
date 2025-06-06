@@ -1,7 +1,6 @@
 <template>
     <div class="graph-card">
         <p style="font-weight: bold; font-size: 16px;">{{ graphName }}</p>
-        <p v-if="data.length === 0">ไม่พบข้อมูล</p>
         <div ref="chart"></div>
     </div>
 </template>
@@ -38,8 +37,7 @@ export default {
             const data = this.data;
             console.log("Data from prop:", data);
             const metric = ['total_view', 'total_comment', 'total_share', 'total_like', 'total_love', 'total_sad', 'total_wow', 'total_angry'];
-
-            const margin = { top: 5, right: 20, bottom: 40, left: 40 };
+            const margin = { top: 5, right: 20, bottom: 40, left: 80 };
             const width = 1600 - margin.left - margin.right;
             const height = 220 - margin.top - margin.bottom;
 
@@ -82,6 +80,20 @@ export default {
                     .call(d3.axisBottom(x));
                 svg.append("g")
                     .call(d3.axisLeft(y))
+
+                svg.append("text")
+                    .attr("class", "x label")
+                    .attr("text-anchor", "end")
+                    .attr("x", width / 2)
+                    .attr("y", height + margin.bottom - 2)
+                    .text("published date");
+                svg.append("text")
+                    .attr("class", "y label")
+                    .attr("text-anchor", "end")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", -margin.left + 10)
+                    .attr("x", -margin.top)
+                    .text("engagement count");
             })
         },
         clearChart() {
