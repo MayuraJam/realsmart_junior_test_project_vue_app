@@ -5,7 +5,7 @@ import ForgetPassword from './components/forgetPassword.vue';
 import SetNewPassword from './components/SetNewPassword.vue';
 
 const routes = [
-  { path: '/login', component: Login ,name:"login"},
+  { path: '/', component: Login ,name:"login"},
   { path: '/forgetpassword', component: ForgetPassword ,name:"forgetpassword"},
   { path: '/resetpassword', component: SetNewPassword ,name:"resetpassword"},
   { path: '/dashboard', component: Dashboard ,name:"dashboard"},

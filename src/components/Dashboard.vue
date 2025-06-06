@@ -52,7 +52,6 @@ export default {
                     withCredentials: true
                 });
                 this.user = responseUser.data
-                // วนแสดง data
 
                 this.chartData = responseDataCount.data.data
                 console.log("Data :", this.chartData);
@@ -65,7 +64,7 @@ export default {
 
         },
         handleToLoginPage() {
-            this.$router.push('/login')
+            this.$router.push('/')
         }
     }
 

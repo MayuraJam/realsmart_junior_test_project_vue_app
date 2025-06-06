@@ -1,12 +1,7 @@
-<!-- login card -->
 <template>
-    <div class="card-layout">
-        <div class="card-login">
-            <h1>Forget password</h1>
-            <p>Enter your email for reset your new password</p>
-
+    <div>
+        <CardLayoutSlot title="Forget password" subtitle="Enter your email for reset your new password">
             <form @submit.prevent="handleSubmit">
-                <!-- กดปุ่มแล้ว route ไปหน้า dashboard -->
                 <div class="form-group">
                     <label class="mb-2">Email</label>
                     <input type="email" class="form-control" placeholder="Please enter your Email" id="email"
@@ -14,15 +9,10 @@
                     <p class="errors" v-if="!!errors.email">{{ errors.email }}</p>
                 </div>
                 <button type="submit" class="btn btn-primary">Sent email</button>
-                <a href="/login" style="color:#0057D8 ; text-align:center;">
+                <a href="/" style="color:#0057D8 ; text-align:center;">
                     < back to login</a>
             </form>
-
-        </div>
-        <div class="buttom-detail">
-            <p>Copyright © 2025 ABC Company Limited. All rights reserved. </p>
-            <a href="#">Privacy Policy I Terms & Conditions</a>
-        </div>
+        </CardLayoutSlot>
     </div>
 </template>
 
@@ -30,6 +20,7 @@
 import axios from 'axios';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2'
+import CardLayoutSlot from './layout/CardLayoutSlot.vue';
 
 const validateForm = Yup.object().shape({
     email: Yup.string()
@@ -39,6 +30,9 @@ const validateForm = Yup.object().shape({
 
 export default {
     name: 'ForgetPassword',
+    components: {
+        CardLayoutSlot
+    },
     data() {
         return {
             input: {

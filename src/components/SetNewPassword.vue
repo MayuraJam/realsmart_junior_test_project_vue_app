@@ -1,10 +1,6 @@
-<!-- login card -->
 <template>
-    <div class="card-layout">
-        <div class="card-login">
-            <h1>Reset Password</h1>
-            <p>reset your new password</p>
-
+    <div>
+        <CardLayoutSlot title="Reset Password" subtitle="reset your new password">
             <form @submit.prevent="handleSubmit">
                 <div class="form-group">
                     <label class="mb-2">new password</label>
@@ -21,12 +17,8 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+        </CardLayoutSlot>
 
-        </div>
-        <div class="buttom-detail">
-            <p>Copyright © 2025 ABC Company Limited. All rights reserved. </p>
-            <a href="#">Privacy Policy I Terms & Conditions</a>
-        </div>
     </div>
 </template>
 
@@ -34,6 +26,7 @@
 import axios from 'axios';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2'
+import CardLayoutSlot from './layout/CardLayoutSlot.vue';
 
 const validateForm = Yup.object().shape({
     password: Yup.string()
@@ -47,6 +40,9 @@ const validateForm = Yup.object().shape({
 
 export default {
     name: 'Setnewpassword',
+    components: {
+        CardLayoutSlot
+    },
     data() {
         return {
             input: {
@@ -88,7 +84,7 @@ export default {
                     title: "Reset password success",
                     icon: "success",
                 });
-                this.$router.push('/login');
+                this.$router.push('/');
 
             } catch (err) {
                 console.log("Error when fail to reset :", err?.response?.data?.errMessage || err.message);

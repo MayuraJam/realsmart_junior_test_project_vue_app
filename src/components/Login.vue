@@ -1,12 +1,7 @@
-<!-- login card -->
 <template>
-    <div class="card-layout">
-        <div class="card-login">
-            <h1>Login</h1>
-            <p>Log in to your account</p>
-
-            <form @submit.prevent="handleSubmit">
-                <!-- กดปุ่มแล้ว route ไปหน้า dashboard -->
+    <div>
+        <CardLayoutSlot title="Login" subtitle="Log in to your account">
+           <form @submit.prevent="handleSubmit">
                 <div class="form-group">
                     <label class="mb-2">Email</label>
                     <input type="email" class="form-control" placeholder="Please enter your Email" id="email"
@@ -22,12 +17,7 @@
                 <a href="/forgetpassword" style="color:#0057D8 ;">Forgot Password?</a>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
-
-        </div>
-        <div class="buttom-detail">
-            <p>Copyright © 2025 ABC Company Limited. All rights reserved. </p>
-            <a href="#">Privacy Policy I Terms & Conditions</a>
-        </div>
+        </CardLayoutSlot>
     </div>
 </template>
 
@@ -35,6 +25,7 @@
 import axios from 'axios';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2'
+import CardLayoutSlot from './layout/CardLayoutSlot.vue';
 
 const validateForm = Yup.object().shape({
     email: Yup.string()
@@ -47,6 +38,9 @@ const validateForm = Yup.object().shape({
 
 export default {
     name: 'Login',
+    components: {
+        CardLayoutSlot
+    },
     data() {
         return {
             input: {

@@ -35,7 +35,7 @@ export default {
       }).then(
         res => {
           console.log(res);
-          this.$router.push('/login')
+          this.$router.push('/')
         }
       ).catch(err => {
         const errMessage = err.response.data.errMessage;
