@@ -14,8 +14,9 @@
                 </div>
                 <div class="form-group">
                     <label class="mb-2">confirm new Password</label>
-                    <input type="password" class="form-control" placeholder="Please enter your password" id="confilmPassword"
-                        v-model="input.confilmPassword" @blur="validate('confilmPassword')" @keypress="validate('confilmPassword')">
+                    <input type="password" class="form-control" placeholder="Please enter your password"
+                        id="confilmPassword" v-model="input.confilmPassword" @blur="validate('confilmPassword')"
+                        @keypress="validate('confilmPassword')">
                     <p class="errors" v-if="!!errors.confilmPassword">{{ errors.confilmPassword }}</p>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -35,12 +36,13 @@ import * as Yup from 'yup';
 import Swal from 'sweetalert2'
 
 const validateForm = Yup.object().shape({
-    confilmPassword: Yup.string()
-        .required("Please enter your Password")
-        .min(6, "password should be less thsn 6 characters"),
     password: Yup.string()
         .required("Please enter your Password")
         .min(6, "password should be less thsn 6 characters"),
+    confilmPassword: Yup.string()
+        .required("Please enter your Password")
+        .min(6, "password should be less thsn 6 characters")
+        .oneOf([Yup.ref('password'), null], "Passwords must match")
 })
 
 export default {
@@ -54,47 +56,48 @@ export default {
             errors: {
                 password: '',
                 confilmPassword: '',
-            }
+            },
+            user: null
         }
     },
     methods: {
-        handleSubmit() {
-            validateForm.validate(this.input, { abortEarly: false }).then(() => {
-                const data = {
-                    password: this.input.password
-                }
-                // axios.post('user/login', data, {
-                //     withCredentials: true
-                // })
-                //     .then(
-                //         res => {
-                //             console.log(res);
-                //             Swal.fire({
-                //                 title: "Login success",
-                //                 icon: "success",
-                //             });
-                //             this.$router.push('/dashboard')
-                //         }
-                //     ).catch(err => {
-                //         const errMessage = err.response.data.errMessage;
-                //         console.log("Login error :", errMessage);
-                //         Swal.fire({
-                //             icon: "error",
-                //             title: "Login fail",
-                //             text: "ไม่สามารถเข้าสู่ระบบได้"
-                //         });
+        async handleSubmit() {
+            if (!this.input.password || !this.input.confilmPassword) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Please enter your new password",
+                });
+                return;
+            }
 
-                //     }
-                //     )
-                this.$router.push('/login')
-            })
-                .catch((err) => {
-                    err.inner.array.forEach((error) => {
-                        this.errors = {
-                            ...this.errors, [error.path]: error.message
-                        };
-                    });
-                })
+            try {
+                await validateForm.validate(this.input, { abortEarly: false });
+
+                const responseUser = await axios.get('user', { withCredentials: true });
+                this.user = responseUser.data;
+                console.log("UserData :", this.user)
+
+                const data = {
+                    id: this.user._id,
+                    password: this.input.password
+                };
+                const res = await axios.put('http://localhost:3030/user/passwordReset', data, { withCredentials: true });
+
+                console.log(res.data);
+                Swal.fire({
+                    title: "Reset password success",
+                    icon: "success",
+                });
+                this.$router.push('/login');
+
+            } catch (err) {
+                console.log("Error when fail to reset :", err?.response?.data?.errMessage || err.message);
+                Swal.fire({
+                    icon: "error",
+                    title: "Reset password fail",
+                    text: "ไม่สามารถเปลี่ยนรหัสผ่านใหม่ได้",
+                });
+            }
         },
         validate(field) {
             validateForm.validateAt(field, this.input).then(() => (this.errors[field] = ""))
@@ -117,7 +120,7 @@ export default {
 
 .card-login {
     width: 485px;
-    min-height: 454px;
+    min-height: 400px;
     border: 1.5px solid #D7DDEC;
     border-radius: 10px;
     background-color: #F6F8FB;
