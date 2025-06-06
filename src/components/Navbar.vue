@@ -10,18 +10,21 @@ defineProps({
 </script>
 
 <template>
-  <nav class="navbar navbar-light bg-#fff justify-content-between p-2 px-3 shadow-sm">
+  <nav class="navbar  navbar-light bg-#fff justify-content-between p-2 px-3 shadow-sm">
     <a class="navbar-brand">Dashboard</a>
     <div class="active-part">
       <div v-if="email" class="user-account">
         <userIcon />
-        <p class="ms-2 mt-3">{{email}}</p>
+        <p class="ms-2 mt-3">{{ email }}</p>
       </div>
       <div v-else></div>
-      <button class="btn btn-outline-secondary my-1 my-sm-0" type="submit" @click="handleToLoginPage">{{ email ?"logout" : "log in" }}</button>
+      <button class="btn btn-outline-secondary my-1 my-sm-0" type="submit" @click="handleToLoginPage">{{ email ?
+        "logout"
+        : "log in" }}</button>
     </div>
   </nav>
 
+ 
 </template>
 
 <script>
@@ -56,10 +59,12 @@ export default {
   align-items: center;
   gap: 20px;
 }
-.user-account{
+
+.user-account {
   display: flex;
   align-items: center;
 }
+
 nav {
   width: 100%;
 }
