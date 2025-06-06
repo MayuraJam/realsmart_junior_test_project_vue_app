@@ -2,24 +2,22 @@
 <template>
     <div class="card-layout">
         <div class="card-login">
-            <h1>Login</h1>
-            <p>Log in to your account</p>
+            <h1>Reset Password</h1>
+            <p>reset your new password</p>
 
             <form @submit.prevent="handleSubmit">
-                <!-- กดปุ่มแล้ว route ไปหน้า dashboard -->
                 <div class="form-group">
-                    <label class="mb-2">Email</label>
-                    <input type="email" class="form-control" placeholder="Please enter your Email" id="email"
-                        v-model="input.email" @blur="validate('email')" @keypress="validate('email')">
-                    <p class="errors" v-if="!!errors.email">{{ errors.email }}</p>
-                </div>
-                <div class="form-group">
-                    <label class="mb-2">Password</label>
+                    <label class="mb-2">new password</label>
                     <input type="password" class="form-control" placeholder="Please enter your password" id="password"
                         v-model="input.password" @blur="validate('password')" @keypress="validate('password')">
                     <p class="errors" v-if="!!errors.password">{{ errors.password }}</p>
                 </div>
-                <a href="/forgetpassword" style="color:#0057D8 ;">Forgot Password?</a>
+                <div class="form-group">
+                    <label class="mb-2">confirm new Password</label>
+                    <input type="password" class="form-control" placeholder="Please enter your password" id="confilmPassword"
+                        v-model="input.confilmPassword" @blur="validate('confilmPassword')" @keypress="validate('confilmPassword')">
+                    <p class="errors" v-if="!!errors.confilmPassword">{{ errors.confilmPassword }}</p>
+                </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
 
@@ -37,25 +35,25 @@ import * as Yup from 'yup';
 import Swal from 'sweetalert2'
 
 const validateForm = Yup.object().shape({
-    email: Yup.string()
-        .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i, "Invalid email format")
-        .required("Please enter your Email"),
+    confilmPassword: Yup.string()
+        .required("Please enter your Password")
+        .min(6, "password should be less thsn 6 characters"),
     password: Yup.string()
         .required("Please enter your Password")
         .min(6, "password should be less thsn 6 characters"),
 })
 
 export default {
-    name: 'Login',
+    name: 'Setnewpassword',
     data() {
         return {
             input: {
-                email: '',
-                password: ''
+                password: '',
+                confilmPassword: '',
             },
             errors: {
-                email: '',
-                password: ''
+                password: '',
+                confilmPassword: '',
             }
         }
     },
@@ -63,32 +61,32 @@ export default {
         handleSubmit() {
             validateForm.validate(this.input, { abortEarly: false }).then(() => {
                 const data = {
-                    email: this.input.email,
                     password: this.input.password
                 }
-                axios.post('user/login', data, {
-                    withCredentials: true
-                })
-                    .then(
-                        res => {
-                            console.log(res);
-                            Swal.fire({
-                                title: "Login success",
-                                icon: "success",
-                            });
-                            this.$router.push('/dashboard')
-                        }
-                    ).catch(err => {
-                        const errMessage = err.response.data.errMessage;
-                        console.log("Login error :", errMessage);
-                        Swal.fire({
-                            icon: "error",
-                            title: "Login fail",
-                            text: "ไม่สามารถเข้าสู่ระบบได้"
-                        });
+                // axios.post('user/login', data, {
+                //     withCredentials: true
+                // })
+                //     .then(
+                //         res => {
+                //             console.log(res);
+                //             Swal.fire({
+                //                 title: "Login success",
+                //                 icon: "success",
+                //             });
+                //             this.$router.push('/dashboard')
+                //         }
+                //     ).catch(err => {
+                //         const errMessage = err.response.data.errMessage;
+                //         console.log("Login error :", errMessage);
+                //         Swal.fire({
+                //             icon: "error",
+                //             title: "Login fail",
+                //             text: "ไม่สามารถเข้าสู่ระบบได้"
+                //         });
 
-                    }
-                    )
+                //     }
+                //     )
+                this.$router.push('/login')
             })
                 .catch((err) => {
                     err.inner.array.forEach((error) => {

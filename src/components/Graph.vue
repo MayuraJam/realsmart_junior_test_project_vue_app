@@ -63,7 +63,7 @@ export default {
 
 <style scoped>
 .graph-card {
-    min-width: 1100px;
+    min-width: 1200px;
     height: 300px;
     display: flex;
     flex-direction: column;
@@ -86,5 +86,19 @@ export default {
 .x-axis text,
 .y-axis text {
     font-size: 12px;
+}
+
+@media (min-width: 720px) {
+.graph-card {
+    min-width: 100%;
+    height: 300px;
+}
+}
+
+@media (min-width: 540px) {
+.graph-card {
+    min-width: 100%;
+    height: 300px;
+}
 }
 </style>

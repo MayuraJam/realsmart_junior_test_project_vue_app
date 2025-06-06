@@ -1,10 +1,10 @@
 <template>
     <div class="graph-card">
         <p style="font-weight: bold; font-size: 16px;">{{ graphName }}</p>
-        <p v-if="data.length">รายละเอียดกราฟ</p>
+        <p v-if="data.length"></p>
         <p v-else>ไม่พบข้อมูล</p>
-        <div ref="chart" ></div>
-        </div>
+        <div ref="chart"></div>
+    </div>
 </template>
 
 <script>
@@ -22,7 +22,18 @@ export default {
         }
     },
     mounted() {
-        this.createChart();
+        if (this.data.length) {
+            this.createChart();
+        }
+    },
+    watch: {
+        // เป็นส่วนของการเติดตามและฝ้าตรวจสอบเงื่อนไขเมื่อมีการเปลี่ยนแปลง แล้วกำหดว่าให้ทำอะไร
+        data(newData) {
+            if (newData.length) {
+                this.clearChart(); 
+                this.createChart();
+            }
+        }
     },
     methods: {
         createChart() {
@@ -58,7 +69,7 @@ export default {
                 .datum(data)
                 .attr("fill", "none")
                 .attr("stroke", "steelblue")
-                .attr("stroke-width", 2)
+                .attr("stroke-width", 1)
                 .attr("d", line);
 
             svg.append("g")
@@ -67,6 +78,9 @@ export default {
 
             svg.append("g")
                 .call(d3.axisLeft(y));
+        },
+        clearChart() {
+            d3.select(this.$refs.chart).selectAll("*").remove();
         }
     }
 }
@@ -74,17 +88,33 @@ export default {
 
 <style scoped>
 .graph-card {
-    min-width: 1100px;
+       min-width: 1200px;
     height: 300px;
     display: flex;
     flex-direction: column;
     border: 1px solid #D7DDEC;
     border-radius: 10px;
     padding: 20px;
+     overflow-x: auto;
 }
 
 .x-axis text,
 .y-axis text {
     font-size: 12px;
 }
+
+@media (min-width: 720px) {
+.graph-card {
+    min-width: 100%;
+    height: 300px;
+}
+}
+
+@media (min-width: 540px) {
+.graph-card {
+    min-width: 100%;
+    height: 300px;
+}
+}
+
 </style>

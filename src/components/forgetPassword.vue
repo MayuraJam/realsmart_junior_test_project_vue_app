@@ -2,8 +2,8 @@
 <template>
     <div class="card-layout">
         <div class="card-login">
-            <h1>Login</h1>
-            <p>Log in to your account</p>
+            <h1>Forget password</h1>
+            <p>Enter your email for reset your new password</p>
 
             <form @submit.prevent="handleSubmit">
                 <!-- กดปุ่มแล้ว route ไปหน้า dashboard -->
@@ -13,14 +13,9 @@
                         v-model="input.email" @blur="validate('email')" @keypress="validate('email')">
                     <p class="errors" v-if="!!errors.email">{{ errors.email }}</p>
                 </div>
-                <div class="form-group">
-                    <label class="mb-2">Password</label>
-                    <input type="password" class="form-control" placeholder="Please enter your password" id="password"
-                        v-model="input.password" @blur="validate('password')" @keypress="validate('password')">
-                    <p class="errors" v-if="!!errors.password">{{ errors.password }}</p>
-                </div>
-                <a href="/forgetpassword" style="color:#0057D8 ;">Forgot Password?</a>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Sent email</button>
+                <a href="/login" style="color:#0057D8 ; text-align:center;">
+                    < back to login</a>
             </form>
 
         </div>
@@ -40,51 +35,52 @@ const validateForm = Yup.object().shape({
     email: Yup.string()
         .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i, "Invalid email format")
         .required("Please enter your Email"),
-    password: Yup.string()
-        .required("Please enter your Password")
-        .min(6, "password should be less thsn 6 characters"),
 })
 
 export default {
-    name: 'Login',
+    name: 'ForgetPassword',
     data() {
         return {
             input: {
                 email: '',
-                password: ''
             },
             errors: {
                 email: '',
-                password: ''
             }
         }
     },
     methods: {
         handleSubmit() {
+            if (!this.input.email) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Please enter your email",
+                });
+                return;
+            }
             validateForm.validate(this.input, { abortEarly: false }).then(() => {
                 const data = {
                     email: this.input.email,
-                    password: this.input.password
                 }
-                axios.post('user/login', data, {
+                axios.post('user/forgotPassword', data, {
                     withCredentials: true
                 })
                     .then(
                         res => {
                             console.log(res);
                             Swal.fire({
-                                title: "Login success",
+                                title: "sent email success",
                                 icon: "success",
                             });
-                            this.$router.push('/dashboard')
+                            this.$router.push('/resetpassword')
                         }
                     ).catch(err => {
                         const errMessage = err.response.data.errMessage;
                         console.log("Login error :", errMessage);
                         Swal.fire({
                             icon: "error",
-                            title: "Login fail",
-                            text: "ไม่สามารถเข้าสู่ระบบได้"
+                            title: "User does not exist",
+                            text: errMessage
                         });
 
                     }
@@ -119,7 +115,7 @@ export default {
 
 .card-login {
     width: 485px;
-    min-height: 454px;
+    min-height: 300px;
     border: 1.5px solid #D7DDEC;
     border-radius: 10px;
     background-color: #F6F8FB;
