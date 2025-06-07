@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container-fluid m-0 p-0">
         <Navbar :email="user ? user.email : ''" />
         <div class="graph-container" v-if="user !== null">
             <DataGraph graphName="Timeline Data" :data="chartData" />
@@ -57,15 +57,9 @@ export default {
                     withCredentials: true
                 });
                 this.user = responseUser.data
-
                 this.chartData = responseDataCount.data.data
-                console.log("Data :", this.chartData);
-
                 this.keywordData = responseKeywordCount.data.data
-                console.log("keyword Data :", this.keywordData);
-
                 this.engagementChartData = responseEngagementCount.data.data
-                console.log("Engagement Data :", this.engagementChartData);
             } catch (error) {
                 console.error("Error loading dashboard data:", error);
             }
@@ -80,12 +74,6 @@ export default {
 </script>
 
 <style scoped>
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
 .graph-container {
     display: flex;
     flex-direction: column;

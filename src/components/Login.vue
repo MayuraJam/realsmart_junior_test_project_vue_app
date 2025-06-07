@@ -55,6 +55,7 @@ export default {
     },
     methods: {
         handleSubmit() {
+            
             validateForm.validate(this.input, { abortEarly: false }).then(() => {
                 const data = {
                     email: this.input.email,

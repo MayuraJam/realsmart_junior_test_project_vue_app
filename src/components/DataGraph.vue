@@ -40,7 +40,7 @@ export default {
             const data = this.data;
 
             const margin = { top: 20, right: 20, bottom: 40, left: 45 };
-            const width = 1100 - margin.left - margin.right;
+            const width = 1600 - margin.left - margin.right;
             const height = 200 - margin.top - margin.bottom;
 
             const svg = d3.select(this.$refs.chart)
@@ -62,7 +62,6 @@ export default {
             const line = d3.line()
                 .x(d => x(d.dimension))
                 .y(d => y(d.metric))
-                .curve(d3.curveMonotoneX);
 
             svg.append("path")
                 .datum(data)
@@ -83,7 +82,7 @@ export default {
                 .attr("text-anchor", "end")
                 .attr("x", width / 2)
                 .attr("y", height + margin.bottom - 2)
-                .text("published date (hour)");
+                .text("published date");
             svg.append("text")
                 .attr("class", "y label")
                 .attr("text-anchor", "end")
