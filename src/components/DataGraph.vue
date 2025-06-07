@@ -89,7 +89,7 @@ export default {
                 .attr("transform", "rotate(-90)")
                 .attr("y", -margin.left + 8)
                 .attr("x", -margin.top)
-                .text("massage count");
+                .text("Massage count");
         },
         clearChart() {
             d3.select(this.$refs.chart).selectAll("*").remove();
