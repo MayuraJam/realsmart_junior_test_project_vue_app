@@ -1,14 +1,15 @@
 <template>
     <div class="graph-card">
         <p style="font-weight: bold; font-size: 16px;">{{ graphName }}</p>
-        <p v-if="data.length"></p>
-        <p v-else>ไม่พบข้อมูล</p>
+        <div id="legendData"></div>
         <div ref="chart"></div>
     </div>
 </template>
 
 <script>
 import * as d3 from "d3";
+import { formatThaiDate } from "../util/changeToThaiFormatDate";
+
 export default {
     name: 'DataGraph',
     props: {
@@ -38,7 +39,6 @@ export default {
     methods: {
         createChart() {
             const data = this.data;
-
             const margin = { top: 20, right: 20, bottom: 40, left: 45 };
             const width = 1600 - margin.left - margin.right;
             const height = 200 - margin.top - margin.bottom;
@@ -72,7 +72,7 @@ export default {
 
             svg.append("g")
                 .attr("transform", `translate(0,${height})`)
-                .call(d3.axisBottom(x));
+                .call(d3.axisBottom(x).tickFormat(d => formatThaiDate(d)));
 
             svg.append("g")
                 .call(d3.axisLeft(y));
@@ -90,10 +90,42 @@ export default {
                 .attr("y", -margin.left + 8)
                 .attr("x", -margin.top)
                 .text("Massage count");
+
+            const label = ["message"];
+            const size = 12;
+            const spacing = 5;
+            const legendXstart = 0;
+            const legendY = 0;
+            const SVG = d3.select("#legendData")
+                .append("svg")
+                .attr("width", label * 120)
+                .attr("height", 20);
+
+            SVG.selectAll("rect")
+                .data(label)
+                .enter()
+                .append("rect")
+                .attr("x", (d, i) => legendXstart + i * 120)
+                .attr("y", legendY)
+                .attr("width", size)
+                .attr("height", size)
+                .style("fill", "steelblue");
+
+            SVG.selectAll("text")
+                .data(label)
+                .enter()
+                .append("text")
+                .attr("x", (d, i) => legendXstart + i * 120 + size + spacing)
+                .attr("y", legendY + size / 1.5)
+                .text(d => d)
+                .style("fill", "#000")
+                .style("font-size", "12px")
+                .attr("alignment-baseline", "middle");
         },
         clearChart() {
             d3.select(this.$refs.chart).selectAll("*").remove();
-        }
+        },
+
     }
 }
 </script>

@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { formatThaiDate } from "@/util/changeToThaiFormatDate";
 import * as d3 from "d3";
 export default {
     name: 'KeywordGraph',
@@ -48,13 +49,10 @@ export default {
                 .append("g")
                 .attr("transform", `translate(${margin.left},${margin.top})`);
 
-            // 1. ดึงวันทั้งหมด
             const allDates = [...new Set(rawData.map(d => d.dimension))];
 
-            // 2. ดึง keyword ทั้งหมด
             const allKeywords = [...new Set(rawData.map(d => d.keyword))];
 
-            // 3. สร้างข้อมูลที่เติมช่องว่าง
             const keywordSeries = allKeywords.map(keyword => {
                 const map = new Map(rawData
                     .filter(d => d.keyword === keyword)
@@ -99,7 +97,7 @@ export default {
 
             svg.append("g")
                 .attr("transform", `translate(0,${height})`)
-                .call(d3.axisBottom(x).tickFormat(d => d));  // format วันที่ถ้าต้องการ
+                .call(d3.axisBottom(x).tickFormat(d => formatThaiDate(d)));  // format วันที่ถ้าต้องการ
 
             svg.append("g")
                 .call(d3.axisLeft(y));

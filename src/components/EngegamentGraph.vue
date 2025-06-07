@@ -1,11 +1,13 @@
 <template>
     <div class="graph-card">
         <p style="font-weight: bold; font-size: 16px;">{{ graphName }}</p>
+        <div id="legend"></div>
         <div ref="chart"></div>
     </div>
 </template>
 
 <script>
+import { formatThaiDate } from "@/util/changeToThaiFormatDate";
 import * as d3 from "d3";
 export default {
     name: 'EngagementGraph',
@@ -81,7 +83,7 @@ export default {
 
             svg.append("g")
                 .attr("transform", `translate(0, ${height})`)
-                .call(d3.axisBottom(x));
+                .call(d3.axisBottom(x).tickFormat(d => formatThaiDate(d)));
 
 
             svg.append("g")
@@ -103,6 +105,38 @@ export default {
                 .attr("y", -margin.left + 20)
                 .attr("x", -height / 2)
                 .text("Engagement Count");
+
+            const size = 20;
+            const spacing = 5;
+            const legendY = 10;
+            const legendXstart = 0;
+
+
+            const SVG = d3.select("#legend")
+                .append("svg")
+                .attr("width", metrics.length * 120)
+                .attr("height", 40);
+
+            SVG.selectAll("rect")
+                .data(metrics)
+                .enter()
+                .append("rect")
+                .attr("x", (d, i) => legendXstart + i * 120)
+                .attr("y", legendY)
+                .attr("width", size)
+                .attr("height", size)
+                .style("fill", d => color(d));
+
+            SVG.selectAll("text")
+                .data(metrics)
+                .enter()
+                .append("text")
+                .attr("x", (d, i) => legendXstart + i * 120 + size + spacing)
+                .attr("y", legendY + size / 1.5)
+                .text(d => d)
+                .style("fill", "#000")
+                .style("font-size", "12px")
+                .attr("alignment-baseline", "middle");
         },
 
         clearChart() {
