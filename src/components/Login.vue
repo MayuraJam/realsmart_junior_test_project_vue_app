@@ -29,7 +29,6 @@ import CardLayoutSlot from './layout/CardLayoutSlot.vue';
 
 const validateForm = Yup.object().shape({
     email: Yup.string()
-        .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i, "Invalid email format")
         .required("Please enter your Email"),
     password: Yup.string()
         .required("Please enter your Password")
